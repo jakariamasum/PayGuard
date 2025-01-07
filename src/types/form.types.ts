@@ -5,6 +5,7 @@ export interface IInput {
   type: string;
   required?: boolean;
   placeholder: string;
+  icon: ReactNode;
 }
 
 export interface IButton {

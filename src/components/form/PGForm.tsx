@@ -12,7 +12,7 @@ interface Props extends IFormConfig {
   onSubmit: SubmitHandler<any>;
 }
 
-const FXForm = ({ children, resolver, defaultValues, onSubmit }: Props) => {
+const PGForm = ({ children, resolver, defaultValues, onSubmit }: Props) => {
   const formConfig: IFormConfig = {};
 
   if (!!defaultValues) {
@@ -31,4 +31,4 @@ const FXForm = ({ children, resolver, defaultValues, onSubmit }: Props) => {
   );
 };
 
-export default FXForm;
+export default PGForm;

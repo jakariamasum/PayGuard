@@ -12,14 +12,6 @@ export const handlePayment = async (data: FieldValues) => {
   window.location.href = stripe.url;
   return stripe.url;
 };
-export const handlePaymentUpdate = async (id: string, status: string) => {
-  const res = await fetch(`/api/payments/${id}`, {
-    method: "PUT",
-    body: JSON.stringify({ id, status }),
-    headers: { "Content-Type": "application/json" },
-  });
-  return await res.json();
-};
 
 export const getAllPayments = async () => {
   const res = await fetch(`${envConfig.next_public}/api/payments`);
@@ -32,4 +24,15 @@ export const getUserPayments = async (id: string) => {
   );
   const data = await res.json();
   return data;
+};
+
+export const handlePaymentUpdate = async (id: string, status: string) => {
+  const res = await fetch("/api/payments", {
+    method: "PUT",
+    body: JSON.stringify({ id, status }),
+    headers: { "Content-Type": "application/json" },
+  });
+  const test = await res.json();
+  console.log("update here", test);
+  return test;
 };

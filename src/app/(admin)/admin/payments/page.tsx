@@ -1,104 +1,89 @@
 "use client";
 
 import { envConfig } from "@/envConfig";
-import { handleDocUpdate } from "@/services/documentServices";
+import { handlePaymentUpdate } from "@/services/paymentServices";
 import { useEffect, useState } from "react";
 import { BiCheck, BiChevronDown, BiX } from "react-icons/bi";
-import { FiFileText } from "react-icons/fi";
 import {
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-  Legend,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
   Tooltip,
+  ResponsiveContainer,
 } from "recharts";
 import { toast } from "sonner";
 
-type Document = {
+type Payment = {
   id: string;
   user: { id: string; email: string };
-  file_url: string;
-  uploaded_at: string;
+  amount: number;
+  created_at: string;
   status: "pending" | "approved" | "canceled";
 };
 
-const COLORS = ["#FFBB28", "#00C49F", "#FF8042"];
+const PaymentPage = () => {
+  const [payments, setPayments] = useState<Payment[]>([]);
 
-const DocumentList = () => {
-  const [documents, setDocuments] = useState<Document[]>([]);
+  const groupPaymentsByDate = (payments: Payment[]) => {
+    const grouped: Record<string, number> = {};
 
-  const fetchDocuments = async () => {
+    payments.forEach((payment) => {
+      if (!grouped[payment.created_at]) {
+        grouped[payment.created_at] = 0;
+      }
+      grouped[payment.created_at] += payment.amount;
+    });
+
+    return Object.entries(grouped).map(([date, amount]) => ({ date, amount }));
+  };
+
+  const paymentTrendData = groupPaymentsByDate(payments);
+
+  const fetchPayments = async () => {
     try {
-      const res = await fetch(`${envConfig.next_public}/api/documents`);
+      const res = await fetch(`${envConfig.next_public}/api/payments`);
       const data = await res.json();
-      setDocuments(data);
+      setPayments(data);
     } catch (error) {
-      console.error("Failed to fetch documents:", error);
+      console.error("Failed to fetch payments:", error);
     }
   };
 
   useEffect(() => {
-    fetchDocuments();
+    fetchPayments();
   }, []);
-  const statusCount = documents?.reduce(
-    (acc, doc) => {
-      if (doc.status === "pending") acc.pending++;
-      if (doc.status === "approved") acc.approved++;
-      if (doc.status === "canceled") acc.canceled++;
-      return acc;
-    },
-    { pending: 0, approved: 0, canceled: 0 }
-  );
-  const documentStatusData = [
-    { name: "Pending", value: statusCount.pending },
-    { name: "Approved", value: statusCount.approved },
-    { name: "Rejected", value: statusCount.canceled },
-  ];
+
   const [statusFilter, setStatusFilter] = useState<string>("All");
   const [dateFilter, setDateFilter] = useState<string>("");
 
-  const filteredDocuments = documents?.filter(
-    (document) =>
-      (statusFilter === "All" || document.status === statusFilter) &&
-      (dateFilter === "" || document.uploaded_at >= dateFilter)
+  const filteredPayments = payments.filter(
+    (payment) =>
+      (statusFilter === "All" || payment.status === statusFilter) &&
+      (dateFilter === "" || payment.created_at >= dateFilter)
   );
 
   const handleUpdate = async (id: string, status: string) => {
-    const res = await handleDocUpdate(id, status);
+    const res = await handlePaymentUpdate(id, status);
     if (res) {
       toast.success("Status changed");
-      fetchDocuments();
+      fetchPayments();
     }
   };
 
   return (
     <>
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 className="text-xl font-semibold mb-4 text-black">
-          Document Status Overview
-        </h2>
+        <h2 className="text-xl font-semibold mb-4 text-black">Payment Trend</h2>
         <ResponsiveContainer width="100%" height={300}>
-          <PieChart>
-            <Pie
-              data={documentStatusData}
-              cx="50%"
-              cy="50%"
-              labelLine={false}
-              outerRadius={80}
-              fill="#8884d8"
-              dataKey="value"
-            >
-              {documentStatusData?.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
-              ))}
-            </Pie>
+          <LineChart data={paymentTrendData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" />
+            <YAxis />
             <Tooltip />
-            <Legend />
-          </PieChart>
+            <Line type="monotone" dataKey="amount" stroke="#3B82F6" />
+          </LineChart>
         </ResponsiveContainer>
       </div>
 
@@ -153,7 +138,7 @@ const DocumentList = () => {
                   User
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Document
+                  Amount
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Date
@@ -167,44 +152,41 @@ const DocumentList = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredDocuments?.map((document) => (
-                <tr key={document.id}>
+              {filteredPayments.map((payment) => (
+                <tr key={payment.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {document.user.email}
+                    {payment.user.email}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <div className="flex items-center">
-                      <FiFileText className="h-5 w-5 text-gray-400 mr-2" />
-                      {document?.file_url?.split("/")?.pop()}
-                    </div>
+                    ${payment.amount.toFixed(2)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {document.uploaded_at}
+                    {payment.created_at}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
                       className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        document.status === "approved"
+                        payment.status === "approved"
                           ? "bg-green-100 text-green-800"
-                          : document.status === "canceled"
+                          : payment.status === "canceled"
                           ? "bg-red-100 text-red-800"
                           : "bg-yellow-100 text-yellow-800"
                       }`}
                     >
-                      {document.status}
+                      {payment.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    {document.status === "pending" && (
+                    {payment.status === "pending" && (
                       <>
                         <button
-                          onClick={() => handleUpdate(document.id, "approved")}
+                          onClick={() => handleUpdate(payment.id, "approved")}
                           className="text-green-600 hover:text-green-900 mr-2"
                         >
                           <BiCheck className="h-5 w-5" />
                         </button>
                         <button
-                          onClick={() => handleUpdate(document.id, "canceled")}
+                          onClick={() => handleUpdate(payment.id, "canceled")}
                           className="text-red-600 hover:text-red-900"
                         >
                           <BiX className="h-5 w-5" />
@@ -222,4 +204,4 @@ const DocumentList = () => {
   );
 };
 
-export default DocumentList;
+export default PaymentPage;

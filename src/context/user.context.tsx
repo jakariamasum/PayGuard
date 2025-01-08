@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useRouter } from "next/navigation";
 
 interface User {
@@ -12,6 +19,7 @@ interface User {
 interface UserContextType {
   user: User | null;
   loading: boolean;
+  setLoading: Dispatch<SetStateAction<boolean>>;
   refreshUser: () => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -61,7 +69,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <UserContext.Provider
-      value={{ user, loading, refreshUser: fetchUser, logout }}
+      value={{ user, loading, setLoading, refreshUser: fetchUser, logout }}
     >
       {children}
     </UserContext.Provider>

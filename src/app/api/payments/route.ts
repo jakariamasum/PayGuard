@@ -72,7 +72,11 @@ export async function GET(request: Request) {
       return NextResponse.json(userPayments);
     }
     // If no `user_id` is provided, fetch all payments for admin
-    const allPayments = await prisma.payment.findMany();
+    const allPayments = await prisma.payment.findMany({
+      include: {
+        user: true,
+      },
+    });
 
     return NextResponse.json(allPayments, { status: 200 });
   } catch (error) {
@@ -82,4 +86,27 @@ export async function GET(request: Request) {
       { status: 500 }
     );
   }
+}
+
+export async function PUT(request: Request) {
+  const { id, status } = await request.json();
+
+  const existingPayment = await prisma.payment.findUnique({
+    where: {
+      id: id!,
+    },
+  });
+  if (!existingPayment) {
+    return NextResponse.json({ message: "Payment not found" }, { status: 404 });
+  }
+
+  const updatePayment = await prisma.payment.update({
+    where: {
+      id: id,
+    },
+    data: {
+      status: status,
+    },
+  });
+  return NextResponse.json(updatePayment, { status: 201 });
 }

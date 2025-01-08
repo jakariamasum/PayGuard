@@ -20,13 +20,11 @@ const Login = () => {
     try {
       const res = await handleLogin(data.email, data.password);
 
-      if (res.error) {
+      if (!res) {
         toast.error(res.error);
       } else {
         toast.success("Login successful! Redirecting...");
-        setTimeout(() => {
-          window.location.href = "/";
-        }, 2000);
+        window.location.href = res;
       }
     } catch (error) {
       console.log("login error: ", error);

@@ -1,6 +1,8 @@
+import { envConfig } from "@/envConfig";
 import prisma from "@/lib/prisma";
 import { generateToken } from "@/utils/generateToken";
 import bcrypt from "bcrypt";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
@@ -20,9 +22,21 @@ export async function POST(request: Request) {
       return Response.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    const token = generateToken(user.id);
+    const token = generateToken(user.id, user.role);
+    const role = user.role;
+    const redirectUrl =
+      role === "admin"
+        ? `${envConfig.next_public}/admin`
+        : `${envConfig.next_public}/user`;
 
-    return Response.json({ message: "Login successful", token });
+    const response = NextResponse.json(redirectUrl);
+    response.cookies.set("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 24 * 7,
+      path: "/",
+    });
+    return response;
   } catch (error) {
     console.log("login route error: ", error);
     return Response.json({ error: "Error during login" }, { status: 500 });

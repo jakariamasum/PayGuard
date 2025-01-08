@@ -12,5 +12,7 @@ export const handleLogin = async (email: string, password: string) => {
     body: JSON.stringify({ email, password }),
     headers: { "Content-Type": "application/json" },
   });
-  return await res.json();
+  const test = await res.json();
+  console.log("test here", test);
+  return test;
 };

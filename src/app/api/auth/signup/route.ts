@@ -21,13 +21,8 @@ export async function POST(request: Request) {
       data: { email, password: hashedPassword },
     });
 
-    const token = generateToken(user.id);
-    cookies().set("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 60 * 60 * 24 * 7,
-      path: "/",
-    });
+    const token = generateToken(user.id, user.role);
+
     return Response.json({ message: "Signup successful", token });
   } catch (error) {
     return Response.json({ error: "Error during signup" }, { status: 500 });

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { BiCheckCircle } from "react-icons/bi";
 import { BsClock } from "react-icons/bs";
 import { FiAlertCircle, FiFileText } from "react-icons/fi";
+export const dynamic = "force-dynamic";
 
 const Documents = async () => {
   const documents: IDocument[] = await getUserDocuments(

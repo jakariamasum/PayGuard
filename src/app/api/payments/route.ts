@@ -1,76 +1,84 @@
-import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma";
+import Stripe from "stripe";
+import { envConfig } from "@/envConfig";
 
-export async function POST(request: Request) {
-  const body = await request.json();
-  const { amount, user_id, title } = body;
+const stripe = new Stripe(envConfig.stripe_secret_key!, {
+  apiVersion: "2024-12-18.acacia",
+});
 
-  // check whether user exits or not
-  const user = await prisma.user.findUnique({
-    where: {
-      id: user_id,
-    },
-  });
+export async function POST(req: Request) {
+  const { title, amount, user_id } = await req.json();
+  console.log(title, amount, user_id);
 
-  if (!user) {
+  if (!title || !amount) {
     return NextResponse.json(
-      { message: "User does not exist" },
-      { status: 404 }
+      { error: "Title and amount are required" },
+      { status: 400 }
     );
   }
 
-  // proceed to create payment
-  const payment = await prisma.payment.create({
-    data: {
-      title,
-      user_id,
-      amount: Number(amount),
-    },
-  });
-  return NextResponse.json(payment, { status: 201 });
+  try {
+    const payment = await prisma.payment.create({
+      data: {
+        title,
+        amount: Number(amount),
+        user_id: user_id,
+      },
+    });
+
+    const stripeSession = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: title,
+            },
+            unit_amount: amount,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      success_url: `${process.env.NEXT_PUBLIC_URL}/user/payments/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_URL}/user/payments/cancel`,
+      metadata: {
+        paymentId: payment.id,
+      },
+    });
+
+    return NextResponse.json({ url: stripeSession.url });
+  } catch (error) {
+    console.error("Error creating payment:", error);
+    return NextResponse.json(
+      { error: "Failed to create payment" },
+      { status: 500 }
+    );
+  }
 }
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("user_id");
-
   try {
     if (id) {
-      // Fetch payments for a specific user
-      const user = await prisma.user.findUnique({
-        where: {
-          id: id,
-        },
-      });
-
-      if (!user) {
-        return NextResponse.json(
-          { message: "User does not exist" },
-          { status: 404 }
-        );
-      }
-
       const userPayments = await prisma.payment.findMany({
-        where: {
-          user_id: user.id,
-        },
+        where: { user_id: id! },
+        orderBy: { created_at: "desc" },
       });
 
-      return NextResponse.json(userPayments, { status: 200 });
+      return NextResponse.json(userPayments);
     }
-
     // If no `user_id` is provided, fetch all payments for admin
-    const allPayments = await prisma.payment.findMany({
-      include: {
-        user: true,
-      },
-    });
+    const allPayments = await prisma.payment.findMany();
 
     return NextResponse.json(allPayments, { status: 200 });
   } catch (error) {
     console.error("Error fetching payments:", error);
     return NextResponse.json(
-      { message: "Internal server error" },
+      { error: "Failed to fetch payments" },
       { status: 500 }
     );
   }

@@ -1,4 +1,5 @@
 "use client";
+
 import React, { ReactNode } from "react";
 import { createPortal } from "react-dom";
 import Button from "../UI/Button";
@@ -6,11 +7,18 @@ import Button from "../UI/Button";
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onPay: () => void;
   title?: string;
   children: ReactNode;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
+const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  title,
+  onPay,
+  children,
+}) => {
   if (!isOpen) return null;
 
   return createPortal(
@@ -37,7 +45,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
           <Button variant="danger" onClick={onClose}>
             Close
           </Button>
-          <Button>Pay Now</Button>
+          <Button onClick={onPay}>Pay Now</Button>
         </div>
       </div>
     </div>,

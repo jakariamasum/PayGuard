@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Payment, StatusType } from "@prisma/client";
 import { BiCheckCircle, BiPlusCircle } from "react-icons/bi";
 import { FiAlertCircle, FiFileText } from "react-icons/fi";
@@ -13,13 +12,6 @@ interface PaymentListProps {
 
 const PaymentList = ({ payments }: PaymentListProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const router = useRouter();
-
-  const handleNewPayment = async (title: string, amount: number) => {
-    console.log(title, amount);
-    setIsModalOpen(false);
-    router.refresh();
-  };
 
   const handleGenerateInvoice = async (paymentId: string) => {
     console.log(`Generating invoice for payment ${paymentId}`);
@@ -39,7 +31,7 @@ const PaymentList = ({ payments }: PaymentListProps) => {
       </div>
       <div className="bg-white shadow overflow-hidden sm:rounded-md">
         <ul className="divide-y divide-gray-200">
-          {payments.map((payment) => (
+          {payments?.map((payment) => (
             <li key={payment.id}>
               <div className="px-4 py-4 sm:px-6 hover:bg-gray-50 transition duration-150 ease-in-out">
                 <div className="flex items-center justify-between">
@@ -89,10 +81,10 @@ const PaymentList = ({ payments }: PaymentListProps) => {
           ))}
         </ul>
       </div>
+      {payments.length === 0 && <div>No payments exits</div>}
       <PaymentModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={handleNewPayment}
       />
     </div>
   );

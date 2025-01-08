@@ -54,6 +54,7 @@ PayGuard is a robust web application designed to provide secure payment manageme
    ```
 
 3. Create a `.env.local` file in the root directory and configure the following environment variables:
+
    ```env
 
    ```

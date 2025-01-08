@@ -47,7 +47,7 @@ const Header = () => {
               </motion.div>
             ))}
           </div>
-          {user ? (
+          {!user ? (
             <div className="hidden md:flex space-x-4">
               <motion.div
                 whileHover={{ scale: 1.1 }}
@@ -108,7 +108,7 @@ const Header = () => {
                 {item.name}
               </Link>
             ))}
-            {user ? (
+            {!user ? (
               <div>
                 {" "}
                 <Link

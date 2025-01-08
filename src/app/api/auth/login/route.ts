@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import prisma from "@/lib/prisma";
+import { generateToken } from "@/utils/generateToken";
 import bcrypt from "bcrypt";
 
 export async function POST(request: Request) {
@@ -20,8 +20,11 @@ export async function POST(request: Request) {
       return Response.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    return Response.json({ message: "Login successful" });
+    const token = generateToken(user.id);
+
+    return Response.json({ message: "Login successful", token });
   } catch (error) {
-    return Response.json({ error: "Login failed" }, { status: 500 });
+    console.log("login route error: ", error);
+    return Response.json({ error: "Error during login" }, { status: 500 });
   }
 }

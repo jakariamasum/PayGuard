@@ -8,10 +8,32 @@ import LockIcon from "@/components/icons/LockIcon";
 import Button from "@/components/UI/Button";
 import { FieldValues } from "react-hook-form";
 import Link from "next/link";
+import { toast } from "sonner";
+import { useState } from "react";
+import { handleLogin } from "@/services/authServices";
+import LoadingIcon from "@/components/icons/LoadingIcon";
 
 const Login = () => {
+  const [loading, setLoading] = useState(false);
   const onSubmit = async (data: FieldValues) => {
-    console.log("form data: ", data);
+    setLoading(true);
+    try {
+      const res = await handleLogin(data.email, data.password);
+
+      if (res.error) {
+        toast.error(res.error);
+      } else {
+        toast.success("Login successful! Redirecting...");
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 2000);
+      }
+    } catch (error) {
+      console.log("login error: ", error);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,7 +68,16 @@ const Login = () => {
                   placeholder="******"
                   icon={<LockIcon />}
                 />
-                <Button>Login</Button>
+                <Button disabled={loading}>
+                  {loading ? (
+                    <div className="flex items-center space-x-2">
+                      <LoadingIcon />
+                      <span>Login...</span>
+                    </div>
+                  ) : (
+                    "Login"
+                  )}
+                </Button>{" "}
               </div>
             </PGForm>
           </div>

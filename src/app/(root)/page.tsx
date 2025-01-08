@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import Header from "@/components/Header";
 import { BsArrowRight, BsShieldCheck } from "react-icons/bs";
 import { BiBarChart, BiCreditCard, BiLock } from "react-icons/bi";
 import { FiFileText } from "react-icons/fi";
@@ -43,8 +42,6 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
-
       <main>
         <section className="bg-white py-20">
           <div className="container mx-auto px-6 text-center">
@@ -78,7 +75,7 @@ const Home = () => {
                 <BsArrowRight className="ml-2 w-5 h-5" />
               </Link>
               <Link
-                href="#features"
+                href="/features"
                 className="bg-gray-200 text-gray-800 px-8 py-3 rounded-md font-semibold hover:bg-gray-300 transition duration-300 flex items-center justify-center"
               >
                 Learn More

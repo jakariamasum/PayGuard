@@ -1,37 +1,154 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+````markdown
+# PayGuard: Secure Payment Tracking and Verification System
+
+PayGuard is a robust web application designed to provide secure payment management and document verification services. Built with modern web technologies, it offers a user-friendly interface for both clients and administrators to manage payments, upload documents, and track verification statuses.
+
+## Features
+
+- **User Authentication**: Secure login and signup functionality.
+- **Dashboard**: Personalized dashboard for users to view their payment and document status.
+- **Payment Management**:
+  - Create new payment requests
+  - View payment history
+  - Track payment status (Pending, Approved, Rejected)
+- **Document Verification**:
+  - Upload important documents (ID, proof of address, etc.)
+  - Track document verification status
+  - Secure storage and handling of sensitive information
+- **Admin Panel**:
+  - Overview of all payments and documents
+  - Approve or reject payments and documents
+- **Responsive Design**: Fully responsive interface that works on desktop and mobile devices.
+
+## Technologies Used
+
+- **Frontend**: React.js, Next.js, Tailwind CSS
+- **Backend**: Next.js API Routes
+- **Database**: PostgreSQL (with Supabase)
+- **Styling**: Tailwind CSS
+- **Charts**: Recharts
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js (v14 or later)
+- npm or yarn
+- Git
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/jakariamasum/PayGuard.git
+   cd PayGuard
+   ```
+````
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. Create a `.env.local` file in the root directory and configure the following environment variables:
+   ```env
+
+   ```
+
+NODE_ENV=<node_env>
+DATABASE_URL=<your_postgresql_db_link>
+DIRECT_URL=<db_direct_link>  
+NEXT_PUBLIC_SUPABASE_URL=<supabase_url>
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<supabase_annon_key>
+JWT_SECRET=<jwt_secret>
+JWT_EXPIRES=<jwt_expires>
+CLOUDINARY_CLOUD_NAME=<your_cloudinary_cloud_name>
+CLOUDINARY_API_KEY=<your_cloudinary_api_key>
+CLOUDINARY_API_SECRET=<your_cloudinary_api_secret>
+STRIPE_WEBHOOK=<your_stripe_weebhook>
+STRIPE_SECRET_KEY=<your_stripe_secret_key>
+NEXT_PUBLIC_URL=<your_client_url>
+
+````
+
+4. Run database migrations (if applicable):
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npx prisma migrate dev
+````
+
+### Running the Application
+
+1. Start the development server:
+
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+2. Open your browser and navigate to `http://localhost:3000` to access PayGuard.
+
+## Usage
+
+- **User Dashboard**:
+
+  - View an overview of payment statuses and document verification progress.
+  - Create new payment requests and upload necessary documents.
+
+- **Admin Panel**:
+  - Manage users, payments, and document verification statuses.
+  - Approve or reject pending requests.
+
+## Project Structure
+
+```
+payguard/
+├── app/
+│   ├── api/          # API routes for backend functionality
+│   ├── (root)       # Public pages
+│   ├── user/        # User panel pages
+│   ├── admin/        # Admin panel pages
+├── components/       # Reusable React components
+├── lib/              # Utility libraries (e.g., database connection)
+├── styles/           # Global styles and Tailwind configuration
+├── prisma/           # Prisma schema and migrations
+└── public/           # Static assets
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Deployment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Build the application:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+   npm run build
+   # or
+   yarn build
+   ```
 
-## Learn More
+2. Deploy the application to your chosen hosting platform, such as Vercel or Netlify.
 
-To learn more about Next.js, take a look at the following resources:
+3. Ensure all environment variables are set up on the hosting platform.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contributing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+We welcome contributions! To contribute:
 
-## Deploy on Vercel
+1. Fork the repository.
+2. Create a new branch for your feature/bugfix.
+3. Commit your changes with clear messages.
+4. Open a pull request and describe your changes.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-"# PayGuard" 
+This project is licensed under the [MIT License](LICENSE).
+
+## Acknowledgements
+
+- Thanks to the creators of Next.js, Supabase, and Tailwind CSS for providing the tools that made this project possible.
+
+```
+
+```

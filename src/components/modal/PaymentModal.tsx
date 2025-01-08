@@ -7,6 +7,7 @@ import { CgNametag } from "react-icons/cg";
 import { BiDollar } from "react-icons/bi";
 import { FieldValues } from "react-hook-form";
 import { handlePayment } from "@/services/paymentServices";
+import { useUser } from "@/context/user.context";
 
 interface NewPaymentModalProps {
   isOpen: boolean;
@@ -14,11 +15,13 @@ interface NewPaymentModalProps {
 }
 
 const PaymentModal = ({ isOpen, onClose }: NewPaymentModalProps) => {
+  const { user } = useUser();
+  console.log("user form pay: ", user);
   const handleSubmit = async (data: FieldValues) => {
     try {
       const payload = {
         ...data,
-        user_id: "30a7e57c-7b28-42d9-a8c4-3eef1d5b106f",
+        user_id: user?.user_id,
       };
       console.log("Form data submitted: ", payload);
       const url = await handlePayment(payload);

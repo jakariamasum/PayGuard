@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/context/user.context";
 
 const DocumentUpload = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -9,6 +10,7 @@ const DocumentUpload = () => {
   const router = useRouter();
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const { user } = useUser();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -37,7 +39,7 @@ const DocumentUpload = () => {
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("user_id", "30a7e57c-7b28-42d9-a8c4-3eef1d5b106f");
+    formData.append("user_id", user?.user_id as string);
 
     try {
       const response = await fetch("/api/documents", {

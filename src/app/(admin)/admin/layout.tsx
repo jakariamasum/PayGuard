@@ -49,7 +49,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
             </div>
             <div className="flex items-center">
               <button onClick={toggleSidebar} className="p-2">
-                <BiMenu className="h-6 w-6" />
+                <BiMenu className="h-6 w-6 text-black" />
               </button>
             </div>
           </div>
@@ -63,7 +63,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "tween" }}
-            className="fixed inset-y-0 right-0 w-64 bg-white shadow-lg z-50"
+            className="fixed inset-y-0 right-0 w-64 bg-white text-black shadow-lg z-50"
           >
             <div className="p-4">
               <button onClick={toggleSidebar} className="p-2 float-right">

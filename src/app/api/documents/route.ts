@@ -114,3 +114,26 @@ export async function GET(request: Request) {
     );
   }
 }
+
+export async function PUT(request: Request) {
+  const { id, status } = await request.json();
+
+  const existingDoc = await prisma.document.findUnique({
+    where: {
+      id: id!,
+    },
+  });
+  if (!existingDoc) {
+    return NextResponse.json({ message: "Doc not found" }, { status: 404 });
+  }
+
+  const updateDoc = await prisma.document.update({
+    where: {
+      id: id,
+    },
+    data: {
+      status: status,
+    },
+  });
+  return NextResponse.json(updateDoc, { status: 201 });
+}

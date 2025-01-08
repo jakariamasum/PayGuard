@@ -11,5 +11,6 @@ export interface IInput {
 export interface IButton {
   children: ReactNode;
   variant?: "primary" | "secondary" | "danger";
+  disabled?: boolean;
   onClick?: () => void;
 }

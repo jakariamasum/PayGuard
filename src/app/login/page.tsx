@@ -6,13 +6,11 @@ import PGInput from "@/components/form/PGInput";
 import EmailIcon from "@/components/icons/EmailIcon";
 import LockIcon from "@/components/icons/LockIcon";
 import Button from "@/components/UI/Button";
-import { useState } from "react";
 import { FieldValues } from "react-hook-form";
+import Link from "next/link";
 
-const AuthPage = () => {
-  const [isLogin, setIsLogin] = useState(true);
-
-  const onSubmit = (data: FieldValues) => {
+const Login = () => {
+  const onSubmit = async (data: FieldValues) => {
     console.log("form data: ", data);
   };
 
@@ -30,7 +28,7 @@ const AuthPage = () => {
         >
           <div className="px-8 pt-8 pb-8">
             <h2 className="text-3xl font-bold text-white text-center mb-6">
-              {isLogin ? "Welcome Back!" : "Create Your Account"}
+              Welcome Back!
             </h2>
             <PGForm onSubmit={onSubmit}>
               <div className="space-y-4">
@@ -48,7 +46,7 @@ const AuthPage = () => {
                   placeholder="******"
                   icon={<LockIcon />}
                 />
-                <Button>{isLogin ? "Login" : "Sign Up"}</Button>
+                <Button>Login</Button>
               </div>
             </PGForm>
           </div>
@@ -59,13 +57,13 @@ const AuthPage = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
             >
-              {isLogin ? "Don't have an account?" : "Already have an account?"}
-              <button
-                onClick={() => setIsLogin(!isLogin)}
+              Don&lsquo;t have an account?
+              <Link
+                href="/signup"
                 className="font-medium text-indigo-200 hover:text-green-200 ml-1 focus:outline-none focus:underline transition-colors duration-300"
               >
-                {isLogin ? "Sign up" : "Log in"}
-              </button>
+                Sign up
+              </Link>
             </motion.p>
           </div>
         </motion.div>
@@ -74,4 +72,4 @@ const AuthPage = () => {
   );
 };
 
-export default AuthPage;
+export default Login;

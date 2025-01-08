@@ -1,6 +1,11 @@
 import { IButton } from "@/types/form.types";
 
-const Button = ({ children, variant = "primary", ...props }: IButton) => {
+const Button = ({
+  children,
+  variant = "primary",
+  disabled = false,
+  ...props
+}: IButton) => {
   const baseClasses =
     "px-4 py-2 rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2";
   const variantClasses = {
@@ -12,7 +17,11 @@ const Button = ({ children, variant = "primary", ...props }: IButton) => {
   };
 
   return (
-    <button className={`${baseClasses} ${variantClasses[variant]}`} {...props}>
+    <button
+      className={`${baseClasses} ${variantClasses[variant]}`}
+      {...props}
+      disabled={disabled}
+    >
       {children}
     </button>
   );

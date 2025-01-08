@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { BiMenu, BiX } from "react-icons/bi";
+import { useUser } from "@/context/user.context";
+import Button from "./UI/Button";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -14,6 +16,7 @@ const navItems = [
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, logout } = useUser();
 
   return (
     <header className="bg-white shadow-md">
@@ -44,24 +47,41 @@ const Header = () => {
               </motion.div>
             ))}
           </div>
-          <div className="hidden md:flex space-x-4">
-            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-              <Link
-                href="/login"
-                className="text-indigo-600 hover:text-indigo-800 transition duration-300"
+          {user ? (
+            <div className="hidden md:flex space-x-4">
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Login
-              </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-              <Link
-                href="/signup"
-                className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300"
+                <Link
+                  href="/login"
+                  className="text-indigo-600 hover:text-indigo-800 transition duration-300"
+                >
+                  Login
+                </Link>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Sign Up
-              </Link>
-            </motion.div>
-          </div>
+                <Link
+                  href="/signup"
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300"
+                >
+                  Sign Up
+                </Link>
+              </motion.div>
+            </div>
+          ) : (
+            <div className="hidden md:flex space-x-4">
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Button onClick={logout}>Logout</Button>
+              </motion.div>
+            </div>
+          )}
           <div className="md:hidden">
             <button onClick={() => setIsOpen(!isOpen)}>
               {isOpen ? (
@@ -88,18 +108,25 @@ const Header = () => {
                 {item.name}
               </Link>
             ))}
-            <Link
-              href="/login"
-              className="block py-2 text-indigo-600 hover:text-indigo-800 transition duration-300"
-            >
-              Login
-            </Link>
-            <Link
-              href="/signup"
-              className="block py-2 text-indigo-600 hover:text-indigo-800 transition duration-300"
-            >
-              Sign Up
-            </Link>
+            {user ? (
+              <div>
+                {" "}
+                <Link
+                  href="/login"
+                  className="block py-2 text-indigo-600 hover:text-indigo-800 transition duration-300"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/signup"
+                  className="block py-2 text-indigo-600 hover:text-indigo-800 transition duration-300"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            ) : (
+              <Button onClick={logout}>Logout </Button>
+            )}
           </motion.div>
         )}
       </nav>

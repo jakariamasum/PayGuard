@@ -6,8 +6,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { BiCreditCard, BiLogOut, BiMenu, BiX } from "react-icons/bi";
 import { FiFileText } from "react-icons/fi";
+import { useUser } from "@/context/user.context";
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
+  const { logout } = useUser();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -78,13 +80,13 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
                     <span className="ml-2">{item.label}</span>
                   </Link>
                 ))}
-                <Link
-                  href="/logout"
+                <button
+                  onClick={logout}
                   className="flex items-center p-2 hover:bg-gray-100 rounded-md transition-colors duration-200 text-red-600"
                 >
                   <BiLogOut className="w-6 h-6" />
                   <span className="ml-2">Logout</span>
-                </Link>
+                </button>
               </div>
             </div>
           </motion.div>

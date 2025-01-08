@@ -21,7 +21,7 @@ const PaymentModal = ({ isOpen, onClose }: NewPaymentModalProps) => {
     try {
       const payload = {
         ...data,
-        user_id: user?.user_id,
+        user_id: user?.id,
       };
       console.log("Form data submitted: ", payload);
       const url = await handlePayment(payload);

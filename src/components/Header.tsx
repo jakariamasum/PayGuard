@@ -85,9 +85,9 @@ const Header = () => {
           <div className="md:hidden">
             <button onClick={() => setIsOpen(!isOpen)}>
               {isOpen ? (
-                <BiX className="h-6 w-6" />
+                <BiX className="h-6 w-6 text-black " />
               ) : (
-                <BiMenu className="h-6 w-6" />
+                <BiMenu className="h-6 w-6 text-black" />
               )}
             </button>
           </div>

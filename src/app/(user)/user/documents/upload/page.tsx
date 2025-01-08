@@ -39,7 +39,7 @@ const DocumentUpload = () => {
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("user_id", user?.user_id as string);
+    formData.append("user_id", user?.id as string);
 
     try {
       const response = await fetch("/api/documents", {

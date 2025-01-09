@@ -19,6 +19,7 @@ const Login = () => {
     setLoading(true);
     try {
       const res = await handleLogin(data.email, data.password);
+      console.log("login res: ", res);
 
       if (!res) {
         toast.error(res.error);

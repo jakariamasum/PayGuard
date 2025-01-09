@@ -1,75 +1,64 @@
-import { NextResponse } from "next/server";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import Stripe from "stripe";
-import PDFDocument from "pdfkit";
-import { envConfig } from "@/envConfig";
+import { StatusType } from "@prisma/client";
+import { generateInvoice } from "@/utils/generateInvoice";
+import fs from "fs";
+import path from "path";
 
-const stripe = new Stripe(envConfig.stripe_secret_key!, {
-  apiVersion: "2024-12-18.acacia",
-});
-
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const sessionId = searchParams.get("session_id");
-  const user_id = searchParams.get("user_id");
+  const id = searchParams.get("id");
+  console.log("pay id: ", id);
 
-  if (!sessionId) {
+  if (!id) {
     return NextResponse.json(
-      { error: "Session ID is required" },
+      { message: "Payment ID is required" },
+      { status: 400 }
+    );
+  }
+  // Fetch payment and user from the database
+  const payment = await prisma.payment.findUnique({
+    where: { id },
+  });
+
+  if (!payment) {
+    return NextResponse.json({ message: "Payment not found" }, { status: 404 });
+  }
+
+  if (payment.status !== StatusType.approved) {
+    return NextResponse.json(
+      { message: "Invoice can only be generated for approved payments" },
       { status: 400 }
     );
   }
 
-  try {
-    const stripeSession = await stripe.checkout.sessions.retrieve(sessionId);
-    const payment = await prisma.payment.findUnique({
-      where: { id: stripeSession.metadata!.paymentId },
-    });
+  const user = await prisma.user.findUnique({
+    where: { id: payment.user_id },
+  });
 
-    if (!payment || payment.user_id !== user_id) {
-      return NextResponse.json(
-        { error: "Payment not found or unauthorized" },
-        { status: 404 }
-      );
-    }
+  if (!user) {
+    return NextResponse.json({ message: "User not found" }, { status: 404 });
+  }
 
-    // Generate PDF invoice
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const pdfBuffer = await generateInvoicePDF(payment);
+  // Generate the invoice
+  const filePath = await generateInvoice(payment, user, true);
 
-    const invoiceUrl = `/api/payments/invoice/download?paymentId=${payment.id}`;
-
-    return NextResponse.json({ invoiceUrl });
-  } catch (error) {
-    console.error("Error generating invoice:", error);
+  if (!filePath) {
     return NextResponse.json(
-      { error: "Failed to generate invoice" },
+      { message: "Failed to generate invoice" },
       { status: 500 }
     );
   }
-}
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function generateInvoicePDF(payment: any) {
-  return new Promise<Buffer>((resolve, reject) => {
-    const doc = new PDFDocument();
-    const chunks: Buffer[] = [];
-
-    doc.on("data", (chunk) => chunks.push(chunk));
-    doc.on("end", () => resolve(Buffer.concat(chunks)));
-    doc.on("error", reject);
-
-    // Add content to the PDF
-    doc.fontSize(25).text("Invoice", { align: "center" });
-    doc.moveDown();
-    doc.fontSize(14).text(`Invoice Number: ${payment.id}`);
-    doc.text(`Date: ${new Date(payment.created_at).toLocaleDateString()}`);
-    doc.moveDown();
-    doc.text(`Title: ${payment.title}`);
-    doc.text(`Amount: $${(payment.amount / 100).toFixed(2)}`);
-    doc.moveDown();
-    doc.text("Thank you for your business!");
-
-    doc.end();
+  // Stream the file as a download response
+  const fileStream = fs.createReadStream(filePath);
+  const response = new NextResponse(fileStream as any, {
+    headers: {
+      "Content-Type": "application/pdf",
+      "Content-Disposition": `attachment; filename=${path.basename(filePath)}`,
+    },
   });
+
+  return response;
 }

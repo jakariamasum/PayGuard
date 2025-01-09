@@ -5,6 +5,7 @@ import { Payment, StatusType } from "@prisma/client";
 import { BiCheckCircle, BiPlusCircle } from "react-icons/bi";
 import { FiAlertCircle, FiFileText } from "react-icons/fi";
 import PaymentModal from "@/components/modal/PaymentModal";
+import { envConfig } from "@/envConfig";
 
 interface PaymentListProps {
   payments: Payment[];
@@ -15,6 +16,21 @@ const PaymentList = ({ payments }: PaymentListProps) => {
 
   const handleGenerateInvoice = async (paymentId: string) => {
     console.log(`Generating invoice for payment ${paymentId}`);
+    const response = await fetch(
+      `${envConfig.next_public}/api/payments/invoice?id=${paymentId}`
+    );
+
+    if (response.ok) {
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Invoice_${paymentId}.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } else {
+      console.error("Failed to generate invoice");
+    }
   };
 
   return (

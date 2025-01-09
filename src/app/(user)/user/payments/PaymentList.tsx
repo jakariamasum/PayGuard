@@ -86,9 +86,9 @@ const PaymentList = ({ payments }: PaymentListProps) => {
                       {payment.status === StatusType.approved && (
                         <button
                           onClick={() => handleGenerateInvoice(payment.id)}
-                          className="ml-4 text-indigo-600 hover:text-indigo-800"
+                          className="ml-4 font-bold text-indigo-600 hover:text-indigo-800"
                         >
-                          Generate Invoice
+                          Download Invoice
                         </button>
                       )}
                     </div>

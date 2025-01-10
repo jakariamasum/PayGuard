@@ -1,13 +1,23 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-
+export async function GET() {
   try {
     const users = await prisma.user.findMany({
       orderBy: {
         created_at: "desc",
+      },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        created_at: true,
+        _count: {
+          select: {
+            payments: true,
+            documents: true,
+          },
+        },
       },
     });
 

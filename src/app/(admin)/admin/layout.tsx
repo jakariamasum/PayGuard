@@ -7,6 +7,7 @@ import { LuLayoutDashboard } from "react-icons/lu";
 import { BiCreditCard, BiLogOut, BiMenu, BiX } from "react-icons/bi";
 import { FiFileText } from "react-icons/fi";
 import { useUser } from "@/context/user.context";
+import { FaUsers } from "react-icons/fa";
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const { logout } = useUser();
@@ -29,6 +30,11 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       icon: <FiFileText className="w-6 h-6" />,
       label: "Documents",
       href: "/admin/documents",
+    },
+    {
+      icon: <FaUsers className="w-6 h-6" />,
+      label: "Users",
+      href: "/admin/users",
     },
   ];
 

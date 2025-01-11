@@ -36,6 +36,12 @@ export async function POST(request: Request) {
       maxAge: 60 * 60 * 24 * 7,
       path: "/",
     });
+    response.cookies.set("userId", user.id, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 24 * 7,
+      path: "/",
+    });
     return response;
   } catch (error) {
     console.log("login route error: ", error);

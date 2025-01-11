@@ -4,6 +4,8 @@ import { useState } from "react";
 import { User } from "@prisma/client";
 import { useUser } from "@/context/user.context";
 import Button from "@/components/UI/Button";
+import { deleteUser } from "@/services/userServices";
+import { toast } from "sonner";
 
 interface UsersTableProps {
   users: (User & {
@@ -25,7 +27,10 @@ const UserList = ({ users }: UsersTableProps) => {
 
   const handleDelete = async (userId: string) => {
     setIsDeleting(true);
-    console.log("user deleted id: ", userId);
+    const action = await deleteUser(userId);
+    if (action.message) {
+      toast.success("User deleted successfully!");
+    }
     setIsDeleting(false);
   };
 

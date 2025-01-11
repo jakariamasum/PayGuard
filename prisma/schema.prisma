@@ -27,7 +27,7 @@ model Payment {
   amount        Int
   status        StatusType @default(pending)
   user_id       String
-  user          User    @relation(fields: [user_id], references: [id])
+  user          User    @relation(fields: [user_id], references: [id],onDelete: Cascade)
   created_at    DateTime @default(now())
 
   @@map("payments")
@@ -36,7 +36,7 @@ model Payment {
 model Document {
   id            String @id @default(uuid())
   user_id       String
-  user          User @relation(fields: [user_id], references: [id])
+  user          User @relation(fields: [user_id], references: [id],onDelete: Cascade)
   file_url      String
   status        StatusType @default(pending)
   uploaded_at   DateTime @default(now())

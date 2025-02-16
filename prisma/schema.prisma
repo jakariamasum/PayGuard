@@ -13,9 +13,12 @@ model User {
   id            String @id @default(uuid())
   email         String @unique
   password      String
+  balance       Int @default(0)
+  stripeAccountId String?
   role          RoleType @default(user)
   payments      Payment[]
   documents     Document[]
+  withdrawals    Withdrawal[]
   created_at    DateTime @default(now())
 
   @@map("users")
@@ -42,6 +45,18 @@ model Document {
   uploaded_at   DateTime @default(now())
 
   @@map("documents")
+}
+
+model Withdrawal {
+  id               String   @id @default(cuid())
+  amount           Int
+  status           String
+  stripeAccountId  String
+  stripeTransferId String?
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
 

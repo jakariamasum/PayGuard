@@ -1,11 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import Stripe from "stripe";
-import { envConfig } from "@/envConfig";
-
-const stripe = new Stripe(envConfig.stripe_secret_key!, {
-  apiVersion: "2024-12-18.acacia",
-});
+import { stripe } from "@/utils/stripe";
 
 export async function POST(req: Request) {
   const { title, amount, user_id } = await req.json();

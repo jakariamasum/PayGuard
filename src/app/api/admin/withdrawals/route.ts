@@ -14,6 +14,12 @@ export async function GET(request: Request) {
     }
     // If no `user_id` is provided, fetch all withdraws for admin
     const allWithdraws = await prisma.payment.findMany({
+      where: {
+        amount: {
+          gte: 500,
+        },
+      },
+
       include: {
         user: true,
       },

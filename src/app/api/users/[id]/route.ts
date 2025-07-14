@@ -6,7 +6,6 @@ export async function GET(
   req: Request,
   { params }: { params: { id: string } }
 ) {
-  console.log("user id: ", params);
   const { id } = params;
   // Validate the ID
   if (!id) {
@@ -42,7 +41,6 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   const { id } = params;
-  console.log("user id: ", id);
 
   // Validate the ID
   if (!id) {

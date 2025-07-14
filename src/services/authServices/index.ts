@@ -13,6 +13,5 @@ export const handleLogin = async (email: string, password: string) => {
     headers: { "Content-Type": "application/json" },
   });
   const test = await res.json();
-  console.log("admin login here", test);
   return test;
 };

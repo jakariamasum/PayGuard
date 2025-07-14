@@ -17,7 +17,6 @@ interface UserDashboardProps {
 export default function UserDashboard({ userData }: UserDashboardProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { logout } = useUser();
-  console.log("user data: ", userData.email);
 
   return (
     <div className="flex h-screen overflow-hidden text-black">

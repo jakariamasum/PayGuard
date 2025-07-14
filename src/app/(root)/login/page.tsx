@@ -19,7 +19,6 @@ const Login = () => {
     setLoading(true);
     try {
       const res = await handleLogin(data.email, data.password);
-      console.log("login res: ", res);
 
       if (!res) {
         toast.error(res.error);
@@ -28,7 +27,7 @@ const Login = () => {
         window.location.href = res;
       }
     } catch (error) {
-      console.log("login error: ", error);
+      console.error("login error: ", error);
       toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -36,23 +35,23 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen flex items-center justify-center  p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-300 p-4">
       <motion.div
         className="w-full max-w-md"
-        initial={{ opacity: 0, y: 50 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
       >
         <motion.div
-          className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden transform hover:scale-105 transition-transform duration-500"
-          whileHover={{ scale: 1.1 }}
+          className="bg-white text-black backdrop-blur-md rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500"
+          whileHover={{ scale: 1.03 }}
         >
-          <div className="px-8 pt-8 pb-8">
-            <h2 className="text-3xl font-bold text-black text-center mb-6">
-              Welcome Back!
+          <div className="px-8 pt-10 pb-8">
+            <h2 className="text-3xl font-bold  text-center mb-6">
+              Welcome Back 👋
             </h2>
             <PGForm onSubmit={onSubmit}>
-              <div className="space-y-4">
+              <div className="space-y-5">
                 <PGInput
                   type="email"
                   name="email"
@@ -64,33 +63,33 @@ const Login = () => {
                   type="password"
                   name="password"
                   label="Password"
-                  placeholder="******"
+                  placeholder="••••••••"
                   icon={<LockIcon />}
                 />
                 <Button disabled={loading}>
                   {loading ? (
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center justify-center space-x-2">
                       <LoadingIcon />
-                      <span>Login...</span>
+                      <span>Logging in...</span>
                     </div>
                   ) : (
                     "Login"
                   )}
-                </Button>{" "}
+                </Button>
               </div>
             </PGForm>
           </div>
-          <div className="px-8 py-6 bg-white bg-opacity-10 border-t border-white border-opacity-20">
+          <div className="px-8 py-6 bg-white/5 border-t border-white/10 text-center">
             <motion.p
-              className="text-sm text-center text-white"
+              className="text-sm "
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
             >
-              Don&lsquo;t have an account?
+              Don’t have an account?
               <Link
                 href="/signup"
-                className="font-medium text-indigo-200 hover:text-green-200 ml-1 focus:outline-none focus:underline transition-colors duration-300"
+                className="ml-1 font-medium  hover:text-indigo-500 underline transition duration-300"
               >
                 Sign up
               </Link>

@@ -12,7 +12,6 @@ export const handleConfirmWithdrawal = async (id: string) => {
     headers: { "Content-Type": "application/json" },
   });
   const withdraw = await res.json();
-  console.log("withdraws here", withdraw);
   return withdraw;
 };
 export const handleRejectWithdrawal = async (id: string) => {
@@ -21,6 +20,5 @@ export const handleRejectWithdrawal = async (id: string) => {
     headers: { "Content-Type": "application/json" },
   });
   const withdraw = await res.json();
-  console.log("withdraws here", withdraw);
   return withdraw;
 };

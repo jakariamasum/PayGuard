@@ -199,13 +199,13 @@ const DocumentList = () => {
                       <>
                         <button
                           onClick={() => handleUpdate(document.id, "approved")}
-                          className="text-green-600 hover:text-green-900 mr-2"
+                          className="text-green-600 hover:text-green-900 mr-2 cursor-pointer"
                         >
                           <BiCheck className="h-5 w-5" />
                         </button>
                         <button
                           onClick={() => handleUpdate(document.id, "canceled")}
-                          className="text-red-600 hover:text-red-900"
+                          className="text-red-600 hover:text-red-900 cursor-pointer"
                         >
                           <BiX className="h-5 w-5" />
                         </button>

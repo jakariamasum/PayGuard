@@ -37,7 +37,7 @@ const Signup = () => {
         }, 2000);
       }
     } catch (error) {
-      console.log("signup error: ", error);
+      console.error("signup error: ", error);
       toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -45,7 +45,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen flex items-center justify-center  p-4">
+    <div className="bg-gray-300 min-h-screen flex items-center justify-center  p-4">
       <motion.div
         className="w-full max-w-md"
         initial={{ opacity: 0, y: 50 }}
@@ -53,12 +53,12 @@ const Signup = () => {
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         <motion.div
-          className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden transform hover:scale-105 transition-transform duration-500"
+          className="bg-white  backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden transform hover:scale-105 transition-transform duration-500"
           whileHover={{ scale: 1.1 }}
         >
           <div className="px-8 pt-8 pb-8">
             <h2 className="text-3xl font-bold text-black text-center mb-6">
-              Welcome Back!
+              Welcome to PayGuard!
             </h2>
             <PGForm onSubmit={onSubmit}>
               <div className="space-y-4">
@@ -98,7 +98,7 @@ const Signup = () => {
           </div>
           <div className="px-8 py-6 bg-white bg-opacity-10 border-t border-white border-opacity-20">
             <motion.p
-              className="text-sm text-center text-white"
+              className="text-sm text-center text-black"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
@@ -106,7 +106,7 @@ const Signup = () => {
               Already have an account?
               <Link
                 href={"/login"}
-                className="font-medium text-indigo-200 hover:text-green-200 ml-1 focus:outline-none focus:underline transition-colors duration-300"
+                className="font-medium  hover:text-indigo-500 ml-1 focus:outline-none focus:underline transition-colors duration-300"
               >
                 Log in
               </Link>

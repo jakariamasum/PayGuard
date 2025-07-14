@@ -5,6 +5,5 @@ export const getAdminData = async (id: string) => {
     cache: "no-store",
   });
   const data = await res.json();
-  console.log("admin data: ", data);
   return data;
 };

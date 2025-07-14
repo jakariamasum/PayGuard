@@ -4,7 +4,6 @@ import { stripe } from "@/utils/stripe";
 
 export async function POST(req: Request) {
   const { title, amount, user_id } = await req.json();
-  console.log(title, amount, user_id);
 
   if (!title || !amount) {
     return NextResponse.json(

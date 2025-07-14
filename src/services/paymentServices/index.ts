@@ -33,6 +33,5 @@ export const handlePaymentUpdate = async (id: string, status: string) => {
     headers: { "Content-Type": "application/json" },
   });
   const test = await res.json();
-  console.log("update here", test);
   return test;
 };

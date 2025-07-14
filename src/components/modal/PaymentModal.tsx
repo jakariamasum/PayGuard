@@ -16,16 +16,13 @@ interface NewPaymentModalProps {
 
 const PaymentModal = ({ isOpen, onClose }: NewPaymentModalProps) => {
   const { user } = useUser();
-  console.log("user form pay: ", user);
   const handleSubmit = async (data: FieldValues) => {
     try {
       const payload = {
         ...data,
         user_id: user?.id,
       };
-      console.log("Form data submitted: ", payload);
       const url = await handlePayment(payload);
-      console.log("red: ", url);
       window.location.href = url;
       onClose();
     } catch (error) {

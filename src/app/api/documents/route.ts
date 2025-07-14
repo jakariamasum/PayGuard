@@ -49,7 +49,6 @@ export async function POST(request: Request) {
     });
 
     const { secure_url } = uploadResult as { secure_url: string };
-    console.log(userId, secure_url);
 
     // Save document metadata to the database
     const document = await prisma.document.create({
@@ -92,6 +91,14 @@ export async function GET(request: Request) {
       const userDocuments = await prisma.document.findMany({
         where: {
           user_id: user.id,
+        },
+        include: {
+          user: {
+            select: {
+              email: true,
+              id: true,
+            },
+          },
         },
       });
 

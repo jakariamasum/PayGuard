@@ -44,7 +44,7 @@ export async function POST(request: Request) {
     });
     return response;
   } catch (error) {
-    console.log("login route error: ", error);
+    console.error("login route error: ", error);
     return Response.json({ error: "Error during login" }, { status: 500 });
   }
 }

@@ -30,14 +30,12 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  console.log("user from context: ", user);
 
   // Fetch the logged-in user's details
   const fetchUser = async () => {
     setLoading(true);
     try {
       const res = await fetch("/api/auth/me", { credentials: "include" });
-      console.log(res);
       if (res.ok) {
         const data = await res.json();
         setUser(data.user);

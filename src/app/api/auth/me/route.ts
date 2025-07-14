@@ -9,7 +9,6 @@ export async function GET() {
   try {
     // Use the `cookies` utility to access cookies
     const token = cookies().get("token")?.value;
-    console.log("token from me: ", token);
 
     if (!token) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -17,7 +16,6 @@ export async function GET() {
 
     // Verify the token
     const decoded: any = jwt.verify(token, envConfig.jwt_secret!);
-    console.log(decoded);
     const user = await prisma.user.findUnique({
       where: { id: decoded.user_id },
     });

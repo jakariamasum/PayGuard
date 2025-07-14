@@ -5,7 +5,7 @@ export const verifyToken = (token: string) => {
   try {
     return jwt.verify(token, envConfig.jwt_secret!);
   } catch (error) {
-    console.log("jwt error: ", error);
+    console.error("Token verification failed:", error);
     return null;
   }
 };

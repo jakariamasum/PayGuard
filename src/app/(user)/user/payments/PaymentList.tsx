@@ -15,7 +15,6 @@ const PaymentList = ({ payments }: PaymentListProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleGenerateInvoice = async (paymentId: string) => {
-    console.log(`Generating invoice for payment ${paymentId}`);
     const response = await fetch(
       `${envConfig.next_public}/api/payments/invoice?id=${paymentId}`
     );

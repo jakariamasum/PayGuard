@@ -24,6 +24,6 @@ export async function GET(req: Request) {
     const documents = await prisma.document.findMany();
     return NextResponse.json({ users, payments, documents }, { status: 200 });
   } catch (error) {
-    console.log("Something wrong", error);
+    console.error("Something wrong", error);
   }
 }

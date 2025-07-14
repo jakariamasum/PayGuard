@@ -46,7 +46,6 @@ const DocumentUpload = () => {
         method: "POST",
         body: formData,
       });
-      console.log(response);
       if (response.ok) {
         router.push("/user/documents");
       } else {
@@ -56,7 +55,7 @@ const DocumentUpload = () => {
         );
       }
     } catch (error) {
-      console.log("upload error: ", error);
+      console.error("upload error: ", error);
       setError("An error occurred while uploading the document");
     }
     setIsUploading(false);

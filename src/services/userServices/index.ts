@@ -7,7 +7,6 @@ export const getAllUsers = async () => {
   return await res.json();
 };
 export const getCurrentUser = async (id: string) => {
-  console.log("hit :", id);
   if (id === "guest-user-id") {
     return {
       user: { id: "guest-user-id", email: "guest@example.com" },
@@ -19,17 +18,14 @@ export const getCurrentUser = async (id: string) => {
     cache: "no-store",
   });
   const data = await res.json();
-  console.log(id, data);
   return data;
 };
 
 export const deleteUser = async (id: string) => {
-  console.log("before hit: ", id);
   const res = await fetch(`/api/users/${id}`, {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
   });
   const data = await res.json();
-  console.log("data get: ", data);
   return data;
 };

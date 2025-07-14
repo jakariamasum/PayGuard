@@ -8,7 +8,7 @@ import { BsClock } from "react-icons/bs";
 import { FiAlertCircle, FiFileText } from "react-icons/fi";
 type Document = {
   id: string;
-  user_id: string;
+  user: { email: string };
   file_url: string;
   uploaded_at: string;
   status: "pending" | "approved" | "canceled";
@@ -81,7 +81,7 @@ const Documents = () => {
                           </Link>
                         </p>
                         <p className="mt-1 text-xs text-gray-500">
-                          User ID: {document.user_id}
+                          Email: {document.user.email}
                         </p>
                       </div>
                     </div>

@@ -7,7 +7,7 @@ const Button = ({
   ...props
 }: IButton) => {
   const baseClasses =
-    "px-4 py-2 rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2";
+    "px-4 py-2 rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-300 w-full";
   const variantClasses = {
     primary:
       "bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500",
